@@ -13,6 +13,7 @@ AWS_S3_SSE_KMS_KEY_ID="${AWS_S3_SSE_KMS_KEY_ID:-}"
 CRON_TIME="${CRON_TIME:-10 * * * *}"
 INITIAL_DOWNLOAD="${INITIAL_DOWNLOAD:-true}"
 SYNCEXTRA="${SYNCEXTRA:-}"
+DELETE="${DELETE:-true}"
 
 # Log message
 log(){
@@ -25,7 +26,11 @@ sync_files(){
   src="${1:-}"
   dst="${2:-}"
 
-  sync_cmd="--no-progress --delete --exact-timestamps $SYNCEXTRA"
+  sync_cmd="--no-progress --exact-timestamps $SYNCEXTRA"
+
+  if [[ "$DELETE" == 'true' ]]; then
+    sync_cmd+=' --delete'
+  fi
 
   if [[ "$AWS_S3_SSE" == 'true' ]] || [[ "$AWS_S3_SSE" == 'aes256' ]]; then
     s3_upload_cmd+=' --sse AES256'
