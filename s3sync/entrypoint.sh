@@ -49,6 +49,7 @@ sync_files(){
   if ! eval aws s3 sync "$sync_cmd" "$src" "$dst"; then
     log "Could not sync '${src}' to '${dst}'" >&2; exit 1
   fi
+  log "Sync complete"
 }
 
 # Download files
